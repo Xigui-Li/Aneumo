@@ -23,13 +23,13 @@
 Below are key visualizations illustrating the dataset generation process and sample outputs:
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/SIAH/blob/main/fig/fig1%20workflow.png" alt="Workflow" width="1200px">
+  <img src="https://github.com/Xigui-Li/Anemo/blob/main/fig/fig1%20workflow.png" alt="Workflow" width="1200px">
   <p><b>Figure 1:</b> Workflow of the Aneumo dataset generation process</p>
 </div>
 
 <div align="center" style="display: flex; justify-content: center; gap: 20px;">
-  <img src="https://github.com/Xigui-Li/SIAH/blob/main/fig/Vmax.png" alt="Vmax" style="height: 300px;">
-  <img src="https://github.com/Xigui-Li/SIAH/blob/main/fig/dp.png" alt="DP" style="height: 300px;">
+  <img src="https://github.com/Xigui-Li/Anemo/blob/main/fig/Vmax.png" alt="Vmax" style="height: 300px;">
+  <img src="https://github.com/Xigui-Li/Anemo/blob/main/fig/dp.png" alt="DP" style="height: 300px;">
 </div>
 <p align="center"><b>Figure 2:</b> Visualization of hemodynamic parameters: Maximum velocity (left) and normalized pressure difference (right)</p>
 
