@@ -10,7 +10,7 @@
   - **466 aneurysm-free models**, representing normal vascular structures.
   - **9,534 deformed aneurysm models**, encompassing diverse aneurysm shapes, sizes, and locations.
 
-* These synthetic models were generated through **aneurysm resection** and **deformation operations**, leveraging data from **466 real aneurysm cases**.
+* These synthetic models were generated through **resection** and **deformation** operations, based on **466 real aneurysm cases**.
 
 * The dataset further includes:
   - **10,000+ Medical image-like segmentation mask files**, enabling the development and testing of segmentation algorithms.
