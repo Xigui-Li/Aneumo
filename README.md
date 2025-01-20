@@ -16,7 +16,7 @@
   - **10,000+ Medical image-like segmentation mask files**, enabling the development and testing of segmentation algorithms.
   - **80,000+ Hemodynamic data** obtained at **eight steady-state flow rates (0.001 to 0.004 kg/s)**, covering critical parameters such as velocity, pressure, and wall shear stress.
 
-* **The dataset will be made available for download soon. Stay tuned for updates.**
+* **The dataset will be made available for download soon. Stay tuned for updates.    Please refer to [the paper](https://arxiv.org/abs/2501.09980) for more details.**
 
 ## Visual Overview
 
