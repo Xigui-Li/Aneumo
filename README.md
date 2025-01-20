@@ -6,7 +6,7 @@
 
 * The **Aneumo** dataset comprises **10,000+ 3D models (real and synthetic)**, categorized as follows:
    
-  - **466 real aneurysm models**, sourced from the AneuX dataset ([https://github.com/hirsch-lab/aneuxdb](https://github.com/hirsch-lab/aneuxdb)).
+  - **466 real aneurysm models**, sourced from the [AneuX dataset](https://github.com/hirsch-lab/aneuxdb).
   - **466 aneurysm-free models**, representing normal vascular structures.
   - **9,534 deformed aneurysm models**, encompassing diverse aneurysm shapes, sizes, and locations.
 
@@ -35,4 +35,4 @@ Below are key visualizations illustrating the dataset generation process and sam
 
 ## Acknowledgments
 
-The development of the **Aneumo** dataset was made possible through the use of real-world aneurysm data, with partial contributions from the **AneuX dataset** ([https://github.com/hirsch-lab/aneuxdb](https://github.com/hirsch-lab/aneuxdb)).
+The development of the **Aneumo** dataset was made possible through the use of real-world aneurysm data, with partial contributions from the [AneuX dataset](https://github.com/hirsch-lab/aneuxdb).
