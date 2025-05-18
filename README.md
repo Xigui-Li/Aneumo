@@ -24,8 +24,6 @@ This project also provides two deep learning CFD surrogate modeling code impleme
 1. DeepONet-based model
 2. Hybrid model combining Swin Transformer with DeepONet
 
-<p align="center"><b>Figure 2:</b> Schematic illustration of the DeepONet-SwinT model architecture for predicting aneurysm hemodynamic parameters</p>
-
 <div align="center">
   <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/network.png"  width="1200px">
   <p><b>Figure 2:</b> Schematic illustration of the DeepONet-SwinT model architecture for predicting aneurysm hemodynamic parameters.</p>
