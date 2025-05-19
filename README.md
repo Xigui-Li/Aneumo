@@ -13,9 +13,11 @@
 
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/workflow.png"  width="1200px">
-  <p><b>Figure 1:</b> Workflow for deforming patient-specific aneurysm models and simulating vascular hemodynamics. (a) Patient-derived aneurysmal geometries are first processed to remove the aneurysm and recover a healthy vascular shape. Controlled geometric deformations are then applied to generate synthetic aneurysm models. (b) CFD meshes are created for the deformed geometries, followed by simulations of blood flow velocity and pressure fields for hemodynamic analysis.</p>
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/workflow.png?raw=true" width="800px">
 </div>
+
+**Figure 1:**  Workflow for deforming patient-specific aneurysm models and simulating vascular hemodynamics.  (a) Patient-derived aneurysmal geometries are first processed to remove the aneurysm and recover a healthy vascular shape. Controlled geometric deformations are then applied to generate synthetic aneurysm models.  (b) CFD meshes are created for the deformed geometries, followed by simulations of blood flow velocity and pressure fields for hemodynamic analysis.
+
 
 
 
