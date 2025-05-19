@@ -74,6 +74,7 @@ The project contains implementations of two main deep learning models:
   - Distributed training support
   - Mixed precision computation
   - Checkpoint resumption functionality
+  - Inference scripts provided (`inference.py`)
 
 ### 2. Swin+DeepONet Hybrid Model (`cfd_opt-swin+deeponet`)
 
@@ -83,7 +84,7 @@ The project contains implementations of two main deep learning models:
   - Better spatial feature capture using Swin Transformer
   - Joint extraction of fluid dynamics features with DeepONet
   - Support for distributed training and mixed precision computation
-  - Inference scripts provided (`inference3.py`, `inference4.py`)
+  - Inference scripts provided (`inference.py`)
 
 ## Quick Start
 
