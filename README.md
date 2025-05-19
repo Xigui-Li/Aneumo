@@ -27,7 +27,7 @@ This project also provides two deep learning CFD surrogate modeling code impleme
 2. Hybrid model combining Swin Transformer with DeepONet
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/network.png"  width="1200px">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/network.png"  width="800px">
   <p><b>Figure 2:</b> Schematic illustration of the DeepONet-SwinT model architecture for predicting aneurysm hemodynamic parameters.</p>
 </div>
 
@@ -138,7 +138,7 @@ python inference_swint.py
 <p align="center"><b>Figure 3:</b> Hemodynamic parameter visualization: maximum velocity (left) and normalized pressure difference (right)</p>
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/inference_cfd.png"  width="1200px">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/inference_cfd.png"  width="800px">
   <p><b>Figure 4:</b> Comparison of predicted pressure and velocity fields by DeepONet and DeepONet-SwinT with CFD ground truth, including (a) Wall pressure contour plots, (b) Internal pressure contour plots, and (c) Internal velocity contour plots.</p>
 </div>
 
