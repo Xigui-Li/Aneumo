@@ -68,7 +68,7 @@ The project contains implementations of two main deep learning models:
 ### 1. DeepONet Model (`cfd_opt-deeponet`)
 
 - CFD surrogate model based on DeepONet architecture
-- Implementation file: `v3_8.py`
+- Implementation file: `main_train.py`
 - Features:
   - Efficient prediction of hemodynamic parameters
   - Distributed training support
@@ -78,7 +78,7 @@ The project contains implementations of two main deep learning models:
 ### 2. Swin+DeepONet Hybrid Model (`cfd_opt-swin+deeponet`)
 
 - Hybrid architecture combining Swin Transformer with DeepONet
-- Implementation file: `v3_swin_bs8.py`
+- Implementation file: `main_train_swin.py`
 - Features:
   - Better spatial feature capture using Swin Transformer
   - Joint extraction of fluid dynamics features with DeepONet
@@ -111,11 +111,11 @@ pip install -r requirements.txt
 ```bash
 # DeepONet model
 cd cfd_opt-deeponet
-torchrun --nproc_per_node=NUM_GPUS ./v3_8.py
+torchrun --nproc_per_node=NUM_GPUS ./main_train.py
 
 # Swin+DeepONet model
 cd cfd_opt-swin+deeponet
-torchrun --nproc_per_node=NUM_GPUS ./v3_swin_bs8.py
+torchrun --nproc_per_node=NUM_GPUS ./main_train_swin.py
 ```
 
 Model parameters and configurations can be adjusted in the `config/default.yaml` file in each model directory.
