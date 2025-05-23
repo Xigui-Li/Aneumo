@@ -1,6 +1,6 @@
 # Aneumo: A Large-Scale Multimodal Aneurysm Dataset with Computational Fluid Dynamics Simulations and Deep Learning Benchmarks
 
-[![arXiv](https://img.shields.io/badge/arXiv-2501.09980-b31b1b.svg)](https://arxiv.org/abs/2501.09980)
+[![arXiv](https://img.shields.io/badge/arXiv-2505.14717-b31b1b.svg)](https://arxiv.org/abs/2505.14717)
 [![HuggingFace](https://img.shields.io/badge/🤗-Dataset-yellow.svg)](https://huggingface.co/datasets/SAIS-Life-Science/Aneumo)
 
 ## Project Overview
@@ -11,15 +11,11 @@
 - 85,280 hemodynamic simulation data sets under 8 different flow conditions
 - Medical imaging-style segmentation masks and multiple data representation formats
 
-
 <div align="center">
   <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/workflow.png?raw=true" width="800px">
 </div>
 
 **Figure 1:**  Workflow for deforming patient-specific aneurysm models and simulating vascular hemodynamics.  (a) Patient-derived aneurysmal geometries are first processed to remove the aneurysm and recover a healthy vascular shape. Controlled geometric deformations are then applied to generate synthetic aneurysm models.  (b) CFD meshes are created for the deformed geometries, followed by simulations of blood flow velocity and pressure fields for hemodynamic analysis.
-
-
-
 
 This project also provides two deep learning CFD surrogate modeling code implementations for efficient prediction of hemodynamic parameters:
 
@@ -27,11 +23,9 @@ This project also provides two deep learning CFD surrogate modeling code impleme
 2. Hybrid model combining Swin Transformer with DeepONet
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/network.png"  width="800px">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/network.png?raw=true"  width="800px">
   <p><b>Figure 2:</b> Schematic illustration of the DeepONet-SwinT model architecture for predicting aneurysm hemodynamic parameters.</p>
 </div>
-
-
 
 ## Dataset Features and Contributions
 
@@ -63,28 +57,54 @@ All data formats are compatible with mainstream machine learning frameworks (PyT
 
 ## Code Structure and Functionality
 
-The project contains implementations of two main deep learning models:
+The project contains implementations of two main deep learning models and their inference code:
 
 ### 1. DeepONet Model (`cfd_opt-deeponet`)
 
 - CFD surrogate model based on DeepONet architecture
-- Implementation file: `main_train.py`
+- Implementation files:
+  - `main_train.py` - Training script
+  - `inference_deeponet.py` - Inference script in root directory
 - Features:
-  - Efficient prediction of hemodynamic parameters
+  - Efficient prediction of hemodynamic parameters without requiring image data
   - Distributed training support
   - Mixed precision computation
   - Checkpoint resumption functionality
-  - Inference scripts provided (`inference.py`)
 
 ### 2. Swin+DeepONet Hybrid Model (`cfd_opt-swin+deeponet`)
 
 - Hybrid architecture combining Swin Transformer with DeepONet
-- Implementation file: `main_train_swin.py`
+- Implementation files:
+  - `main_train_swin.py` - Training script
+  - `inference_swint.py` - Inference script in root directory
 - Features:
-  - Better spatial feature capture using Swin Transformer
+  - Better spatial feature capture using Swin Transformer for 3D medical images
   - Joint extraction of fluid dynamics features with DeepONet
   - Support for distributed training and mixed precision computation
-  - Inference scripts provided (`inference.py`)
+
+### Repository Structure
+
+```
+├── inference_deeponet.py         # DeepONet model inference script
+├── inference_swint.py            # Swin+DeepONet model inference script
+├── cfd_opt-deeponet/             # DeepONet model implementation
+│   ├── main_train.py             # Training script
+│   ├── checkpoint/               # Model checkpoints
+│   │   └── deeponet/             # Pre-trained DeepONet checkpoints
+│   ├── config/                   # Configuration files
+│   ├── model/                    # Model architecture definition
+│   └── ...
+├── cfd_opt-swin+deeponet/        # Swin+DeepONet model implementation
+│   ├── main_train_swin.py        # Training script
+│   ├── checkpoint/               # Model checkpoints
+│   │   └── deeponet_swin/        # Pre-trained Swin+DeepONet checkpoints
+│   ├── config/                   # Configuration files
+│   ├── model/                    # Model architecture definition
+│   └── ...
+└── real_data/                    # Sample data for inference testing
+    ├── cfd_data/                 # CFD simulation data samples
+    └── img_data/                 # 3D image data samples
+```
 
 ## Quick Start
 
@@ -107,6 +127,23 @@ cd cfd_opt-swin+deeponet
 pip install -r requirements.txt
 ```
 
+### Sample Data and Quick Test
+
+The repository includes sample data in the `real_data` directory for quick testing:
+
+```bash
+# Sample CFD data structure
+real_data/
+  ├── cfd_data/              # CFD simulation data
+  │   ├── m=0.002/           # Flow rate = 0.002 kg/s
+  │   │   └── 1.npz          # Case ID 1 
+  │   └── m=0.003/           # Flow rate = 0.003 kg/s
+  │       └── 1.npz          # Case ID 1
+  └── img_data/              # 3D image data for Swin+DeepONet model
+      └── 1.npy              # Image data for case ID 1
+```
+
+
 ### Training Models
 
 ```bash
@@ -119,36 +156,52 @@ cd cfd_opt-swin+deeponet
 torchrun --nproc_per_node=NUM_GPUS ./main_train_swin.py
 ```
 
-Model parameters and configurations can be adjusted in the `config/default.yaml` file in each model directory.
+Model parameters and configurations can be adjusted in the `config/default.yaml` file in each model directory. Each implementation includes:
+
+- Distributed training with DDP (DistributedDataParallel)
+- Mixed precision training for faster computation
+- Checkpoint saving and resumption
+- Comprehensive logging and monitoring
+- Customizable loss functions and optimizers
 
 ### Inference
 
+Two ready-to-use inference scripts are provided at the root level of the repository:
+
+1. `inference_deeponet.py` - For running inference with DeepONet model
+2. `inference_swint.py` - For running inference with the hybrid Swin Transformer + DeepONet model
+
+The repository includes pre-trained model checkpoints and sample data for quick testing:
+
 ```bash
+# Using DeepONet model for inference
+python inference_deeponet.py
+
 # Using Swin+DeepONet model for inference
-cd cfd_opt-swin+deeponet
 python inference_swint.py
 ```
+
+
+
 
 ## Visualization
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/Vmax.png" alt="Vmax" width="45%">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/dp.png" alt="DP" width="45%">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/Vmax.png?raw=true" alt="Vmax" width="45%">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/dp.png?raw=true" alt="DP" width="45%">
 </div>
 <p align="center"><b>Figure 3:</b> Hemodynamic parameter visualization: maximum velocity (left) and normalized pressure difference (right)</p>
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/inference_cfd.png"  width="800px">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/inference_cfd.png?raw=true"  width="800px">
   <p><b>Figure 4:</b> Comparison of predicted pressure and velocity fields by DeepONet and DeepONet-SwinT with CFD ground truth, including (a) Wall pressure contour plots, (b) Internal pressure contour plots, and (c) Internal velocity contour plots.</p>
 </div>
-
-
 
 ## Data Access
 
 - The dataset is available for download, with a total size of approximately 4TB; each compressed package contains 40 case_ids (e.g., 1-40)
 - Download link: [https://huggingface.co/datasets/SAIS-Life-Science/Aneumo](https://huggingface.co/datasets/SAIS-Life-Science/Aneumo)
-- For detailed data descriptions, generation methods, and experimental results, please refer to our [paper](https://arxiv.org/abs/2501.09980).
+- For detailed data descriptions, generation methods, and experimental results, please refer to our [paper](https://arxiv.org/abs/2505.14717).
 
 ## Citation
 
@@ -156,9 +209,9 @@ If you use the Aneumo dataset or our code in your research, please cite:
 
 ```bibtex
 @article{li2025aneumo,
-  title={Aneumo: A Large-Scale Comprehensive Synthetic Dataset of Aneurysm Hemodynamics},
-  author={Li, Xigui and Zhou, Yuanye and Xiao, Feiyang and Guo, Xin and Zhang, Yichi and Jiang, Chen and Ge, Jianchao and Wang, Xiansheng and Wang, Qimeng and Zhang, Taiwei and others},
-  journal={arXiv preprint arXiv:2501.09980},
+  title={Aneumo: A Large-Scale Multimodal Aneurysm Dataset with Computational Fluid Dynamics Simulations and Deep Learning Benchmarks},
+  author={Xigui Li and Yuanye Zhou and Feiyang Xiao and Xin Guo and Chen Jiang and Tan Pan and Xingmeng Zhang and Cenyu Liu and Zeyun Miao and Jianchao Ge and Xiansheng Wang and Qimeng Wang and Yichi Zhang and Wenbo Zhang and Fengping Zhu and Limei Han and Yuan Qi and Chensen Lin and Yuan Cheng},
+  journal={arXiv preprint arXiv:2505.14717},
   year={2025}
 }
 ```

@@ -37,7 +37,7 @@ data:
                          m0.003, m0.0035, m0.00375, m0.004]
   test_flow:  [m0.0015, m0.0035]
 paths:
-  data_dir: "/joball"
+  data_dir: ".../joball"
   checkpoint_dir: "checkpoint/deeponet"
   train_csv: "/data/train.csv"
   val_csv: "/data/val.csv"
