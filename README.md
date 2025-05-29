@@ -136,11 +136,11 @@ The repository includes sample data in the `real_data` directory for quick testi
 real_data/
   ├── cfd_data/              # CFD simulation data
   │   ├── m=0.002/           # Flow rate = 0.002 kg/s
-  │   │   └── 1.npz          # Case ID 1 
+  │   │   └── 4.npz          # Case ID 4 
   │   └── m=0.003/           # Flow rate = 0.003 kg/s
-  │       └── 1.npz          # Case ID 1
+  │       └── 4.npz          # Case ID 4
   └── img_data/              # 3D image data for Swin+DeepONet model
-      └── 1.npy              # Image data for case ID 1
+      └── 4.npy              # Image data for case ID 4
 ```
 
 
