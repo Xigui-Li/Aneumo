@@ -1,0 +1,8 @@
+torch>=2.1.0
+scipy
+scikit-learn
+tqdm
+einops
+numpy
+omegaconf
+joblib

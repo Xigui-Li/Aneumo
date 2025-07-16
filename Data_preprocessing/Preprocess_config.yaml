@@ -1,0 +1,20 @@
+scripts:
+  Preprocess_ori: 
+    enabled: false
+    script_path: "imagePreprocess_ori.py"
+    raw_image_path: "niidata/"
+    raw_label_path: "niidata/"
+    corped_image_path: "data/corped_image/"
+  Preprocess2: 
+    enabled: false
+    script_path: "imagePreprocess2.py"
+    raw_image_path: "data/niidata/"
+    raw_label_path: "data/niidata/"
+    corped_image_path: "data/image_5/"
+  Preprocess2-1: 
+    enabled: true
+    script_path: "imagePreprocess2-1.py"
+    raw_image_path: "data/image_5_norma/"
+    raw_label_path: "data/image_5_norma/"
+    corped_image_path: "data/image_5_fixed/"
+

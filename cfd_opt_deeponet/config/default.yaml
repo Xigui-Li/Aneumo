@@ -1,0 +1,43 @@
+# Configuration File for DeepONet-CFD Project
+#
+# This YAML file defines the default configuration for the DeepONet-CFD project.
+# It includes settings for the model architecture, training parameters, FSDP (Fully Sharded Data Parallel) options,
+# data loading, and file paths. These configurations can be modified to customize the training process.
+
+model:
+  trunk:
+    in_dim: 4
+    out_dim: 256
+    hidden: 64
+    layers: 4
+  branch_bc:
+    in_dim: 7
+    out_dim: 64
+    hidden: 64
+    layers: 4
+  branch_bp:
+    in_dim: 1
+    out_dim: 4
+train:
+  dtype: fp16         # fp32 | fp16 | bf16
+  learning_rate : 1e-4
+  epochs: 10
+  batch_size: 8
+  resume_epoch: 1
+fsdp:
+  enable: true
+  sharding: NO_SHARD      # NO_SHARD | FULL_SHARD | HYBRID_SHARD
+  # min_params: 1_000_000 # Auto-wrap threshold for FSDP (optional)
+  rank: 0                 # Process rank, dynamically injected during initialization
+data:
+  batch_size: 8
+  num_workers: 8
+  num_points: 1800
+  train_flow: [m0.001, m0.0015, m0.002, m0.0025,
+                         m0.003, m0.0035, m0.00375, m0.004]
+  test_flow:  [m0.0015, m0.0035]
+paths:
+  data_dir: ".../joball"
+  checkpoint_dir: "checkpoint/deeponet"
+  train_csv: "/data/train.csv"
+  val_csv: "/data/val.csv"
