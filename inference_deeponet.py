@@ -341,9 +341,9 @@ def main(cfd_path, read_folder, save_folder, case_id_range=None, test_flow_rates
     logger.info(f"DeepONet inference completed! Results saved to {save_folder}")
 
 if __name__ == '__main__':
-    cfd_path = "/real_data/cfd_data"
-    read_folder = "/cfd_opt_deeponet/checkpoint/deeponet"
-    save_folder = "/predictions/deeponet"
+    cfd_path = "real_data/cfd_data"
+    read_folder = "cfd_opt_deeponet/checkpoint/deeponet"
+    save_folder = "predictions/deeponet"
     os.makedirs(save_folder, exist_ok=True)
 
     case_id_list = [4]
