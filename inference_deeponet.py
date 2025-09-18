@@ -2,7 +2,7 @@ import os
 import torch
 import torch.nn.functional as F
 from torch.cuda.amp import autocast
-import NeuralNetworks as nn_net  # Assumes NeuralNetworks.py contains Trunk, Branch, Branch_Bypass
+import cfd_opt_deeponet.model.NeuralNetworks as nn_net  # Assumes NeuralNetworks.py contains Trunk, Branch, Branch_Bypass
 import csv
 import time
 import numpy as np
