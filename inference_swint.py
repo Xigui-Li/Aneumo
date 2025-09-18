@@ -2,7 +2,7 @@ import os
 import torch
 import torch.nn.functional as F
 from torch.cuda.amp import autocast
-import NeuralNetworks as nn_net
+import cfd_opt_swin_deeponet.model.NeuralNetworks as nn_net
 import csv
 import time
 import numpy as np
