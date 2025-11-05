@@ -108,7 +108,7 @@ def load_and_process_case(args):
         return f"Error processing case {case_id} with flow rate {flow_rate}: {e}"
 
 
-# 并行处理所有数据
+
 def process_all_data_parallel():
     """
     Parallelize the data loading and processing for all (case_id, flow_rate) 
