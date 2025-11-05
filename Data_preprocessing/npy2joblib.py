@@ -36,7 +36,7 @@ ID_list = list(range(1, 10564))
 flow_rate_list = ["m=0.001", "m=0.0015", "m=0.002", "m=0.0025",
                   "m=0.003", "m=0.0035", "m=0.00375", "m=0.004"]
 
-# 读取并处理单个数据样本
+
 def load_and_process_case(args):
     """
     Read and preprocess data for a single (case_id, flow_rate) pair, then store 
