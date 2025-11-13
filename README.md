@@ -5,22 +5,27 @@
 
 ## Project Overview
 
-**Aneumo** is a large-scale, comprehensive cerebral aneurysm hemodynamics dataset designed to advance machine learning and computational fluid dynamics (CFD) research related to cerebral aneurysms. The dataset includes:
+**Aneumo** is a large-scale, comprehensive, **multimodal** cerebral aneurysm hemodynamics dataset designed to advance machine learning and computational fluid dynamics (CFD) research.
 
-- 10,660 high-precision 3D models generated through controlled deformation techniques based on 427 real aneurysm geometries
-- 85,280 hemodynamic simulation data sets under 8 different flow conditions
-- Medical imaging-style segmentation masks and multiple data representation formats
+This dataset is built on 427 real aneurysm geometries and includes:
+
+-   **10,660** high-precision 3D models (synthetic aneurysm evolutions).
+-   A massive **95,940** total simulation cases, uniquely including:
+    -   **85,280 steady-state** simulations (under 8 flow conditions).
+    -   **10,660 high-fidelity transient (pulsatile)** simulations.
+-   **Pre-computed WSS**: **Wall Shear Stress (WSS)**, velocity, and pressure fields are pre-computed for **all 95,940 cases**.
+-   **Multimodal Inputs**: Rich geometric representations including **Segmentation Masks**, **Point Clouds**, and **Meshes**.
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/workflow.png?raw=true" width="800px">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/fig1_3.png?raw=true" width="800px">
 </div>
+<p align="center"><b>Figure 1:</b> The multimodal data generation pipeline for the Aneumo dataset. (a) Patient-derived geometries are processed into "Aneurysm-free" shapes, then deformed into synthetic models and their corresponding 3D segmentation masks. (b) Key spatial modalities for each geometry include its CFD Mesh, a sampled Point Cloud, and the resulting hemodynamic fields (Velocity, Pressure, WSS) at a representative snapshot. (c) Example of the <b>transient (pulsatile)</b> data, showing the velocity field's evolution at five time points (t=0.2s to 1.0s) within one cardiac cycle.</p>
 
-**Figure 1:**  Workflow for deforming patient-specific aneurysm models and simulating vascular hemodynamics.  (a) Patient-derived aneurysmal geometries are first processed to remove the aneurysm and recover a healthy vascular shape. Controlled geometric deformations are then applied to generate synthetic aneurysm models.  (b) CFD meshes are created for the deformed geometries, followed by simulations of blood flow velocity and pressure fields for hemodynamic analysis.
 
-This project also provides two deep learning CFD surrogate modeling code implementations for efficient prediction of hemodynamic parameters:
+This project also provides deep learning benchmark code for our **"Syn-to-Real"** task (training on synthetic Aneumo, testing on real AneuX data) for efficient hemodynamic prediction:
 
-1. DeepONet-based model
-2. Hybrid model combining Swin Transformer with DeepONet
+1.  DeepONet-based model
+2.  Hybrid model combining Swin Transformer with DeepONet (for **multimodal inputs: masks + point clouds**)
 
 <div align="center">
   <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/network.png?raw=true"  width="800px">
@@ -31,9 +36,10 @@ This project also provides two deep learning CFD surrogate modeling code impleme
 
 ### Key Contributions
 
-1. **First Large-Scale High-Fidelity Hemodynamics Dataset**: Provides 85,280 hemodynamic data samples (velocity/pressure fields) generated through CFD simulations under various physiological flow conditions (0.001–0.004 kg/s), filling a critical gap in AI-driven hemodynamic modeling.
-2. **Diverse Aneurysm Geometry Evolution Data**: Based on 427 real aneurysm geometries, 10,660 high-quality 3D models were generated through controlled deformation techniques, comprehensively capturing aneurysm geometric evolution across different stages and supporting quantitative modeling of rupture risk.
-3. **Multimodal Data Fusion Framework**: The dataset includes high-resolution binary segmentation mask images precisely aligned with CFD parameters, supporting multimodal learning tasks and facilitating multi-scale feature mapping in complex flow environments.
+1.  **First Large-Scale, Dual-Mode Hemodynamics Dataset**: Provides **95,940** total hemodynamic data samples. This is the first dataset to include **10,660 high-fidelity transient (pulsatile) simulations** at this scale, filling a critical gap for spatio-temporal AI models.
+2.  **Pre-Computed WSS for All Cases**: To maximize usability and lower the barrier for AI research, the critical **Wall Shear Stress (WSS)** fields are pre-computed for **all 95,940** steady-state and transient cases.
+3.  **Rich Multimodal Inputs**: Based on 427 real geometries, 10,660 models are provided, each represented as a **3D Mesh**, a **Segmentation Mask**, and a **Point Cloud**, supporting diverse CVPR tasks (GNNs, Transformers, CNNs).
+4.  **Massive Scale & "Syn-to-Real" Benchmark**: The dataset generation required over **11 million CPU core-hours**. We also provide a benchmark for **Syn-to-Real** generalization (training on synthetic Aneumo data, testing on unseen real AneuX data).
 
 ### Data Format and Organization
 
@@ -183,8 +189,6 @@ python inference_swint.py
 ```
 
 
-
-
 ## Visualization
 
 <div align="center">
@@ -198,11 +202,19 @@ python inference_swint.py
   <p><b>Figure 4:</b> Comparison of predicted pressure and velocity fields by DeepONet and DeepONet-SwinT with CFD ground truth, including (a) Wall pressure contour plots, (b) Internal pressure contour plots, and (c) Internal velocity contour plots.</p>
 </div>
 
+
 ## Data Access
 
-- The dataset is available for download, with a total size of approximately 4TB; each compressed package contains 40 case_ids (e.g., 1-40)
-- Download link: [Aneumo Dataset](https://huggingface.co/datasets/SAIS-Life-Science/Aneumo)
-- For detailed data descriptions, generation methods, and experimental results, please refer to our [paper](https://arxiv.org/abs/2505.14717).
+-   **Massive Scale**: The dataset required over **11 million CPU core-hours** to generate.
+-   **Total Storage**:
+    -   **Steady-State (85,280 cases)**: ~23.1 TB (raw), processed to **4.0 TB**.
+    -   **Transient (10,660 cases)**: **100+ TB** (raw).
+
+-   **Download & Availability**:
+    -   **Available Now**: The 4.0 TB processed **steady-state dataset** (containing Velocity & Pressure fields) is available at: [Aneumo Dataset on HuggingFace 🤗](https://huggingface.co/datasets/SAIS-Life-Science/Aneumo).
+    -   ⏳ **Coming Soon**: Due to the massive scale, the **steady-state WSS fields** and the entire **100+ TB transient dataset** are currently being sliced for easier access. We are uploading these to Hugging Face incrementally. **Please stay tuned!**
+
+-   For detailed data descriptions, generation methods, and benchmark results, please refer to our [paper](https://arxiv.org/abs/2505.14717).
 
 ## Citation
 
