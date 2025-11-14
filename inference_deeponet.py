@@ -2,7 +2,7 @@ import os
 import torch
 import torch.nn.functional as F
 from torch.cuda.amp import autocast
-import NeuralNetworks as nn_net  # Assumes NeuralNetworks.py contains Trunk, Branch, Branch_Bypass
+import cfd_opt_deeponet.model.NeuralNetworks as nn_net  # Assumes NeuralNetworks.py contains Trunk, Branch, Branch_Bypass
 import csv
 import time
 import numpy as np
@@ -341,9 +341,9 @@ def main(cfd_path, read_folder, save_folder, case_id_range=None, test_flow_rates
     logger.info(f"DeepONet inference completed! Results saved to {save_folder}")
 
 if __name__ == '__main__':
-    cfd_path = "/real_data/cfd_data"
-    read_folder = "/cfd_opt_deeponet/checkpoint/deeponet"
-    save_folder = "/predictions/deeponet"
+    cfd_path = "real_data/cfd_data"
+    read_folder = "cfd_opt_deeponet/checkpoint/deeponet"
+    save_folder = "predictions/deeponet"
     os.makedirs(save_folder, exist_ok=True)
 
     case_id_list = [4]
