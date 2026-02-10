@@ -203,7 +203,7 @@ python inference_swint.py
 </div>
 
 <div align="center">
-  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/wss_pred.pdf?raw=true"  width="800px">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/wss.png?raw=true"  width="800px">
   <p><b>Figure 5:</b> The model accurately forecasts the dynamic propagation of high-stress regions and pulsatile peaks over time.</p>
 </div>
 
