@@ -202,6 +202,10 @@ python inference_swint.py
   <p><b>Figure 4:</b> Comparison of predicted pressure and velocity fields by DeepONet and DeepONet-SwinT with CFD ground truth, including (a) Wall pressure contour plots, (b) Internal pressure contour plots, and (c) Internal velocity contour plots.</p>
 </div>
 
+<div align="center">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/wss_pred.pdf?raw=true"  width="800px">
+  <p><b>Figure 5:</b> The model accurately forecasts the dynamic propagation of high-stress regions and pulsatile peaks over time.</p>
+</div>
 
 ## Data Access
 
