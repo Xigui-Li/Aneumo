@@ -216,7 +216,7 @@ python inference_swint.py
 
 -   **Download & Availability**:
     -   **Available Now**: The 4.0 TB processed **steady-state dataset** (containing Velocity & Pressure fields) is available at: [Aneumo Dataset on HuggingFace 🤗](https://huggingface.co/datasets/SAIS-Life-Science/Aneumo).
-    -   ⏳ **Coming Soon**: Due to the massive scale, the **steady-state WSS fields** and the entire **100+ TB transient dataset** are currently being sliced for easier access. We are uploading these to Hugging Face incrementally. **Please stay tuned!**
+    -   ⏳ **Coming Soon**: Due to the massive scale, the **steady-state WSS fields** and the entire **100+ TB transient dataset** are being sliced for easier access. We are gradually uploading the full transient dataset to Hugging Face, with **1,000 already uploaded**. **Please stay tuned!**
 
 -   For detailed data descriptions, generation methods, and benchmark results, please refer to our [paper](https://arxiv.org/abs/2505.14717).
 
