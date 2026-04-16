@@ -20,8 +20,8 @@ import h5py
 from pathlib import Path
 from tqdm import tqdm
 
-from aneumo.models import TemporalDeepONetV2
-from aneumo.dataset import parse_output_vars
+from transient.models import TemporalDeepONetV2
+from transient.dataset import parse_output_vars
 
 
 def add_argument():

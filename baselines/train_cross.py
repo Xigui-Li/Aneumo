@@ -184,7 +184,7 @@ def compute_metrics(pred, target):
 # ────────────────────── DeepONet train/eval ──────────────────────
 
 def build_deeponet(args, device):
-    from aneumo.models import TemporalDeepONetV2
+    from transient.models import TemporalDeepONetV2
     model = TemporalDeepONetV2(
         num_input_vars=5,       # vel(3)+pres(1)+WSS(1)
         num_output_vars=1,      # WSS only

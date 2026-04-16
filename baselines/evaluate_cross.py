@@ -258,7 +258,7 @@ def build_model(model_name, saved_args, device, state_dict=None):
             n_layers=saved_args.get('trans_layers', 8),
         )
     elif model_name == 'deeponet':
-        from aneumo.models import TemporalDeepONetV2
+        from transient.models import TemporalDeepONetV2
         # Infer num_input_vars from checkpoint: point_encoder.0.weight shape is
         # [hidden, 4 + num_input_vars]
         num_input_vars = saved_args.get('num_input_vars', 5)

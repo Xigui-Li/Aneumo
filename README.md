@@ -84,7 +84,7 @@ All data formats are compatible with mainstream machine learning frameworks (PyT
 │   ├── config/                   # Configuration files
 │   ├── model/                    # Model architecture
 │   └── ...
-├── aneumo/                       # [Transient] Core model (Temporal DeepONet V2)
+├── transient/                    # [Transient] Core model (Temporal DeepONet V2)
 │   ├── models.py                 # Network architectures
 │   ├── dataset.py                # Temporal CFD dataset loader
 │   ├── losses.py                 # Loss functions
@@ -235,7 +235,7 @@ bash scripts/train_aneumo.sh 0 with_swin
 bash scripts/train_aneumo.sh 0 no_swin
 
 # Or directly:
-python -m aneumo.train \
+python -m transient.train \
     --h5_path data/case.h5 \
     --output_vars wss \
     --history_encoder transformer \
@@ -273,7 +273,7 @@ NGPU=4 bash scripts/train_cross_geometry.sh unet
 
 ```bash
 # Aneumo
-python -m aneumo.evaluate --checkpoint checkpoint/v2_with_swin/best_model.pt
+python -m transient.evaluate --checkpoint checkpoint/v2_with_swin/best_model.pt
 
 # Baselines
 python -m baselines.evaluate --model fno --checkpoint checkpoint_baselines/fno/best_model.pt

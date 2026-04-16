@@ -1,4 +1,4 @@
-from aneumo.models import (
+from transient.models import (
     TemporalDeepONetV2,
     DeepONetTemporal,
     HistoryEncoder,

@@ -28,8 +28,8 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')
 
-from aneumo.models import TemporalDeepONetV2
-from aneumo.dataset import (
+from transient.models import TemporalDeepONetV2
+from transient.dataset import (
     TemporalCFDDataset, collate_temporal, parse_output_vars
 )
 

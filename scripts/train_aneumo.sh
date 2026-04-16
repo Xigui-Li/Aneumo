@@ -31,12 +31,12 @@ COMMON_ARGS="
 "
 
 if [ "$MODE" = "with_swin" ]; then
-    python -m aneumo.train \
+    python -m transient.train \
         --history_encoder transformer \
         --checkpoint_dir checkpoint/v2_with_swin \
         $COMMON_ARGS
 elif [ "$MODE" = "no_swin" ]; then
-    python -m aneumo.train \
+    python -m transient.train \
         --history_encoder transformer \
         --no_geometry \
         --checkpoint_dir checkpoint/v2_no_swin \

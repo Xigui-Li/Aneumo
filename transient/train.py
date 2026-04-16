@@ -33,8 +33,8 @@ import matplotlib.pyplot as plt
 import matplotlib
 matplotlib.use('Agg')  # 非交互式后端
 
-from aneumo.models import TemporalDeepONetV2
-from aneumo.dataset import (
+from transient.models import TemporalDeepONetV2
+from transient.dataset import (
     TemporalCFDDataset, SyntheticTemporalDataset, collate_temporal,
     parse_output_vars
 )
