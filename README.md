@@ -22,10 +22,16 @@ This dataset is built on 427 real aneurysm geometries and includes:
 <p align="center"><b>Figure 1:</b> The multimodal data generation pipeline for the Aneumo dataset. (a) Patient-derived geometries are processed into "Aneurysm-free" shapes, then deformed into synthetic models and their corresponding 3D segmentation masks. (b) Key spatial modalities for each geometry include its CFD Mesh, a sampled Point Cloud, and the resulting hemodynamic fields (Velocity, Pressure, WSS) at a representative snapshot. (c) Example of the <b>transient (pulsatile)</b> data, showing the velocity field's evolution at five time points (t=0.2s to 1.0s) within one cardiac cycle.</p>
 
 
-This project also provides deep learning benchmark code for our **"Syn-to-Real"** task (training on synthetic Aneumo, testing on real AneuX data) for efficient hemodynamic prediction:
+This project provides deep learning benchmark code for:
 
-1.  DeepONet-based model
-2.  Hybrid model combining Swin Transformer with DeepONet (for **multimodal inputs: masks + point clouds**)
+1.  **Steady-State Models** — "Syn-to-Real" task (training on synthetic Aneumo, testing on real AneuX data):
+    - DeepONet-based model
+    - Hybrid model combining Swin Transformer with DeepONet (for **multimodal inputs: masks + point clouds**)
+
+2.  **Transient Models** — Temporal WSS prediction from pulsatile CFD data:
+    - **Aneumo (Temporal DeepONet V2)**: History encoder (Transformer/MLP) + Swin Transformer geometry encoder + DeepONet with cross-attention
+    - **Baselines**: FNO, 3D U-Net, MeshGraphNet
+    - **Cross-geometry Generalization**: Multi-case training and evaluation with geometry-split and time-split protocols
 
 <div align="center">
   <img src="https://github.com/Xigui-Li/Aneumo/blob/main/fig/network.png?raw=true"  width="800px">
@@ -61,56 +67,48 @@ The dataset provides multiple formats to support different research tasks:
 
 All data formats are compatible with mainstream machine learning frameworks (PyTorch, TensorFlow) and standard CFD analysis tools.
 
-## Code Structure and Functionality
-
-The project contains implementations of two main deep learning models and their inference code:
-
-### 1. DeepONet Model (`cfd_opt-deeponet`)
-
-- CFD surrogate model based on DeepONet architecture
-- Implementation files:
-  - `main_train.py` - Training script
-  - `inference_deeponet.py` - Inference script in root directory
-- Features:
-  - Efficient prediction of hemodynamic parameters without requiring image data
-  - Distributed training support
-  - Mixed precision computation
-  - Checkpoint resumption functionality
-
-### 2. Swin+DeepONet Hybrid Model (`cfd_opt-swin+deeponet`)
-
-- Hybrid architecture combining Swin Transformer with DeepONet
-- Implementation files:
-  - `main_train_swin.py` - Training script
-  - `inference_swint.py` - Inference script in root directory
-- Features:
-  - Better spatial feature capture using Swin Transformer for 3D medical images
-  - Joint extraction of fluid dynamics features with DeepONet
-  - Support for distributed training and mixed precision computation
-
-### Repository Structure
+## Repository Structure
 
 ```
-├── inference_deeponet.py         # DeepONet model inference script
-├── inference_swint.py            # Swin+DeepONet model inference script
-├── cfd_opt_deeponet/             # DeepONet model implementation
+├── inference_deeponet.py         # [Steady] DeepONet inference script
+├── inference_swint.py            # [Steady] Swin+DeepONet inference script
+├── cfd_opt_deeponet/             # [Steady] DeepONet model implementation
 │   ├── main_train.py             # Training script
-│   ├── checkpoint/               # Model checkpoints
-│   │   └── deeponet/             # Pre-trained DeepONet checkpoints
+│   ├── checkpoint/               # Pre-trained checkpoints
 │   ├── config/                   # Configuration files
-│   ├── model/                    # Model architecture definition
+│   ├── model/                    # Model architecture
 │   └── ...
-├── cfd_opt_swin_deeponet/        # Swin+DeepONet model implementation
+├── cfd_opt_swin_deeponet/        # [Steady] Swin+DeepONet model implementation
 │   ├── main_train_swin.py        # Training script
-│   ├── checkpoint/               # Model checkpoints
-│   │   └── deeponet_swin/        # Pre-trained Swin+DeepONet checkpoints
+│   ├── checkpoint/               # Pre-trained checkpoints
 │   ├── config/                   # Configuration files
-│   ├── model/                    # Model architecture definition
+│   ├── model/                    # Model architecture
 │   └── ...
-└── real_data/                    # Sample data for inference testing
+├── aneumo/                       # [Transient] Core model (Temporal DeepONet V2)
+│   ├── models.py                 # Network architectures
+│   ├── dataset.py                # Temporal CFD dataset loader
+│   ├── losses.py                 # Loss functions
+│   ├── train.py                  # Training script
+│   ├── evaluate.py               # Evaluation script
+│   └── inference.py              # Full-mesh inference
+├── baselines/                    # [Transient] Baseline models
+│   ├── models/                   # FNO, U-Net, MeshGraphNet
+│   ├── datasets/                 # Voxelized & cross-geometry datasets
+│   ├── train.py                  # Single-case training
+│   ├── train_cross.py            # Cross-geometry training (multi-GPU DDP)
+│   ├── evaluate.py               # Single-case evaluation
+│   └── evaluate_cross.py         # Cross-geometry evaluation
+├── Data_preprocessing/           # Data preprocessing (steady-state + transient)
+├── scripts/                      # [Transient] Shell scripts for training
+├── visualization/                # [Transient] Result visualization tools
+├── real_data/                    # [Steady] Sample data for inference testing
 │   ├── cfd_data/                 # CFD simulation data samples
 │   └── img_data/                 # 3D image data samples
-├── Data_preprocessing/           # Data preprocessing scripts and instructions    
+├── result/                       # [Transient] WSS comparison visualization
+├── fig/                          # Figures for documentation
+├── MPs.csv                       # Morphometric parameters of 10,660 aneurysms (computed via VMTK)
+├── Connection.csv                # Geometry-to-base-case mapping
+└── datasheet_aneumo.md           # Dataset datasheet (Gebru et al. framework)
 ```
 
 ## Quick Start
@@ -120,46 +118,41 @@ The project contains implementations of two main deep learning models and their 
 - Python 3.8+
 - CUDA-enabled GPU
 - PyTorch 2.0+
-- Additional dependencies listed in the `requirements.txt` files in each subfolder
 
 ### Installing Dependencies
 
 ```bash
-# For DeepONet model
-cd cfd_opt-deeponet
+# For transient models and baselines (root-level)
 pip install -r requirements.txt
 
-# Or for Swin+DeepONet model
-cd cfd_opt-swin+deeponet
-pip install -r requirements.txt
+# Some baselines require additional packages:
+# MeshGraphNet: pip install torch_scatter (match your PyTorch + CUDA version)
+# FNO: pip install neuralop
+# Geometry encoder: pip install monai
 ```
 
-### Sample Data and Quick Test
-
-The repository includes sample data in the `real_data` directory for quick testing:
-
+For steady-state models, install from the subfolder:
 ```bash
-# Sample CFD data structure
-real_data/
-  ├── cfd_data/              # CFD simulation data
-  │   ├── m=0.002/           # Flow rate = 0.002 kg/s
-  │   │   └── 4.npz          # Case ID 4 
-  │   └── m=0.003/           # Flow rate = 0.003 kg/s
-  │       └── 4.npz          # Case ID 4
-  └── img_data/              # 3D image data for Swin+DeepONet model
-      └── 4.npy              # Image data for case ID 4
+# DeepONet model
+cd cfd_opt_deeponet && pip install -r requirements.txt
+
+# Swin+DeepONet model
+cd cfd_opt_swin_deeponet && pip install -r requirements.txt
 ```
 
+---
 
-### Training Models
+## Steady-State Models
+
+### Training
 
 ```bash
 # DeepONet model
-cd cfd_opt-deeponet
+cd cfd_opt_deeponet
 torchrun --nproc_per_node=NUM_GPUS ./main_train.py
 
 # Swin+DeepONet model
-cd cfd_opt-swin+deeponet
+cd cfd_opt_swin_deeponet
 torchrun --nproc_per_node=NUM_GPUS ./main_train_swin.py
 ```
 
@@ -173,13 +166,6 @@ Model parameters and configurations can be adjusted in the `config/default.yaml`
 
 ### Inference
 
-Two ready-to-use inference scripts are provided at the root level of the repository:
-
-1. `inference_deeponet.py` - For running inference with DeepONet model
-2. `inference_swint.py` - For running inference with the hybrid Swin Transformer + DeepONet model
-
-The repository includes pre-trained model checkpoints and sample data for quick testing:
-
 ```bash
 # Using DeepONet model for inference
 python inference_deeponet.py
@@ -188,6 +174,145 @@ python inference_deeponet.py
 python inference_swint.py
 ```
 
+### Sample Data
+
+The repository includes sample data in the `real_data` directory for quick testing:
+
+```
+real_data/
+  ├── cfd_data/              # CFD simulation data
+  │   ├── m=0.002/           # Flow rate = 0.002 kg/s
+  │   │   └── 4.npz          # Case ID 4 
+  │   └── m=0.003/           # Flow rate = 0.003 kg/s
+  │       └── 4.npz          # Case ID 4
+  └── img_data/              # 3D image data for Swin+DeepONet model
+      └── 4.npy              # Image data for case ID 4
+```
+
+---
+
+## Transient Models
+
+### Data Format (HDF5)
+
+Input data for transient models is stored in HDF5 format:
+
+```
+case_XXX.h5
+├── mesh/
+│   ├── coords         [N, 3]       # Node coordinates (x, y, z)
+│   ├── node_type      [N]          # 0=internal, 1=inflow, 2=outflow, 3=wall
+│   ├── wall_indices   [M]          # Indices of wall nodes
+│   └── edges          [E, 2]       # Mesh connectivity
+├── fields/
+│   ├── velocity       [T, N, 3]    # Velocity (u, v, w)
+│   ├── pressure       [T, N, 1]    # Pressure
+│   └── wss            [T, M, 3]    # Wall shear stress (on wall nodes)
+└── time_values        [T]          # Timestep values
+```
+
+### Data Preprocessing
+
+Convert raw VTK simulation output to HDF5:
+
+```bash
+# Single case
+python Data_preprocessing/convert_single.py --case_id 201
+
+# Multi-case (100 cases for cross-geometry experiments)
+python Data_preprocessing/convert_multi_cross.py --num-workers 16
+```
+
+### Training
+
+#### Aneumo (Temporal DeepONet V2)
+
+```bash
+# With Swin geometry encoder
+bash scripts/train_aneumo.sh 0 with_swin
+
+# Without geometry encoder (ablation)
+bash scripts/train_aneumo.sh 0 no_swin
+
+# Or directly:
+python -m aneumo.train \
+    --h5_path data/case.h5 \
+    --output_vars wss \
+    --history_encoder transformer \
+    --boundary_cut 0.1 \
+    --epochs 10000
+```
+
+#### Baselines
+
+```bash
+# All baselines on single GPU
+bash scripts/train_baselines.sh 0
+
+# Individual baseline
+python -m baselines.train --model fno --h5_path data/case.h5 --epochs 10000
+python -m baselines.train --model unet --h5_path data/case.h5 --epochs 10000
+python -m baselines.train --model mgn --h5_path data/case.h5 --epochs 10000
+```
+
+#### Cross-Geometry Generalization
+
+```bash
+# Geometry split (hold out deforms)
+bash scripts/train_cross_geometry.sh fno
+bash scripts/train_cross_geometry.sh deeponet
+
+# Time split (front 80% train, back 20% test)
+bash scripts/train_cross_time.sh mgn
+
+# Multi-GPU
+NGPU=4 bash scripts/train_cross_geometry.sh unet
+```
+
+### Evaluation
+
+```bash
+# Aneumo
+python -m aneumo.evaluate --checkpoint checkpoint/v2_with_swin/best_model.pt
+
+# Baselines
+python -m baselines.evaluate --model fno --checkpoint checkpoint_baselines/fno/best_model.pt
+
+# Cross-geometry
+python -m baselines.evaluate_cross --model fno --split_mode geometry
+```
+
+### Model Architecture
+
+#### Aneumo (Temporal DeepONet V2)
+
+```
+Input: History frames (t-N to t) + Query coordinates (t+1 to t+M)
+                    │
+    ┌───────────────┼───────────────┐
+    │               │               │
+History Encoder  Swin Geometry   Trunk Network
+(Transformer/MLP) Encoder(3D)   (MLP + CrossAttn)
+    │               │               │
+    └───────┬───────┘               │
+            │                       │
+      Branch Fusion            Query Features
+     (history + geo)                │
+            │                       │
+            └───── DeepONet ────────┘
+                    │
+              WSS Prediction
+```
+
+#### Baselines
+
+| Model | Type | Input | Parameters |
+|-------|------|-------|-----------|
+| FNO | Spectral | Voxelized 3D grid | ~1M |
+| U-Net | CNN | Voxelized 3D grid | ~1M |
+| MeshGraphNet | GNN | Mesh graph | ~1M |
+
+---
 
 ## Visualization
 
@@ -207,6 +332,21 @@ python inference_swint.py
   <p><b>Figure 5:</b> The model accurately forecasts the dynamic propagation of high-stress regions and pulsatile peaks over time.</p>
 </div>
 
+<div align="center">
+  <img src="https://github.com/Xigui-Li/Aneumo/blob/main/result/comparison_wss.png?raw=true"  width="800px">
+  <p><b>Figure 6:</b> Transient WSS comparison across models — predicted vs. ground truth Wall Shear Stress fields.</p>
+</div>
+
+## Morphometric Parameters
+
+The file [`MPs.csv`](MPs.csv) provides 15 clinically relevant morphometric parameters for all 10,660 aneurysm geometries, computed using [VMTK](http://www.vmtk.org/). Parameters include Size, Neck Width (NW), Aspect Ratio (AR), Height, Max Diameter, Volume, Surface Area, Bottleneck Factor (BF), Non-Sphericity Index (NSI), Ellipticity Index (EI), Undulation Index (UI), and more.
+
+These parameters have been validated against clinical ranges (see [`datasheet_aneumo.md`](datasheet_aneumo.md) Section 8 for details).
+
+## Dataset Datasheet
+
+A comprehensive dataset datasheet following the [Gebru et al. (2021)](https://doi.org/10.1145/3458723) framework is provided in [`datasheet_aneumo.md`](datasheet_aneumo.md), covering motivation, composition, collection process, preprocessing, intended uses, distribution, and maintenance.
+
 ## Data Access
 
 -   **Massive Scale**: The dataset required over **11 million CPU core-hours** to generate.
@@ -215,8 +355,8 @@ python inference_swint.py
     -   **Transient (10,660 cases)**: **100+ TB** (raw).
 
 -   **Download & Availability**:
-    -   **Available Now**: The 4.0 TB processed **steady-state dataset** (containing Velocity & Pressure fields) is available at: [Aneumo Dataset on HuggingFace 🤗](https://huggingface.co/datasets/SAIS-Life-Science/Aneumo).
-    -   ⏳ **Coming Soon**: Due to the massive scale, the **steady-state WSS fields** and the entire **100+ TB transient dataset** are being sliced for easier access. We are gradually uploading the full transient dataset to Hugging Face, with **1,000 already uploaded**. **Please stay tuned!**
+    -   **Available Now**: The 4.0 TB processed **steady-state dataset** (containing Velocity & Pressure fields) is available at: [Aneumo Dataset on HuggingFace](https://huggingface.co/datasets/SAIS-Life-Science/Aneumo).
+    -   **Coming Soon**: Due to the massive scale, the **steady-state WSS fields** and the entire **100+ TB transient dataset** are being sliced for easier access. We are gradually uploading the full transient dataset to Hugging Face, with **1,000 already uploaded**. **Please stay tuned!**
 
 -   For detailed data descriptions, generation methods, and benchmark results, please refer to our [paper](https://arxiv.org/abs/2505.14717).
 

@@ -1,0 +1,11 @@
+torch>=2.0.0
+numpy
+h5py
+scipy
+tqdm
+tensorboard
+matplotlib
+monai>=1.3.0
+vtk
+neuralop
+torch_scatter
