@@ -2,7 +2,7 @@ import os
 import torch
 import torch.nn.functional as F
 from torch.cuda.amp import autocast
-import NeuralNetworks as nn_net
+import cfd_opt_swin_deeponet.model.NeuralNetworks as nn_net
 import csv
 import time
 import numpy as np
@@ -363,10 +363,10 @@ def main(cfd_path, img_path, read_folder, save_folder, case_id_range=None, test_
     logger.info(f"Inference completed! Results saved in {save_folder}")
 
 if __name__ == '__main__':
-    cfd_path = "/real_data/data/cfd_data"
-    img_path = "/real_data/data/img_data"
-    read_folder = "/cfd_opt_swin_deeponet/checkpoint/deeponet_swin"
-    save_folder = "/predictions/deeponet_swin"
+    cfd_path = "real_data/data/cfd_data"
+    img_path = "real_data/data/img_data"
+    read_folder = "cfd_opt_swin_deeponet/checkpoint/deeponet_swin"
+    save_folder = "predictions/deeponet_swin"
     os.makedirs(save_folder, exist_ok=True)
     case_id_range = (4, 5)
     test_flow_rates = ['m=0.002', 'm=0.003']
